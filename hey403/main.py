@@ -12,8 +12,6 @@ from network.dns_servers import DNS_SERVERS
 
 def main():
     
-    check_internet_connection()
-    
     parser = build_parser()
     args = parser.parse_args()
 
@@ -72,4 +70,6 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    if check_internet_connection() :
+        main()
+    

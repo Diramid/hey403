@@ -1,38 +1,36 @@
-import sys
 import subprocess
 import platform
 
 
-def check_internet_connection(ip="8.8.8.8"):
+def check_internet_connection(
+    ip: str = "8.8.8.8", retries: int = 3, timeout: int = 2
+) -> bool:
+
+    ping_options: dict[str, str] = {
+        "Windows": "-n",
+        "Linux": "-c",
+        "Darwin": "-c",
+    }
+
     system_platform = platform.system()
+    ping_flag = ping_options.get(system_platform)
 
-    if system_platform == "Linux" or system_platform == "Darwin":
+    if not ping_flag:
+        print(f"Your platform is not supported : {system_platform}")
+        return False
+
+    for attempt in range(1, retries + 1):
         try:
-            response = subprocess.run(
-                ["ping", "-c", "2", ip], stdout=subprocess.PIPE, stderr=subprocess.PIPE
+            subprocess.run(
+                ["ping", ping_flag, "2", "-w", str(timeout), ip],
+                check=True,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
             )
-
-            if response.returncode == 0:
-                return True
-            else:
-                sys.exit(
-                    "No internet connection. Please check your internet connection."
-                )
-
-        except Exception as e:
-            sys.exit("Error occurred while checking internet connection.")
-    elif system_platform == "Windows":
-        try:
-            response = subprocess.run(
-                ["ping", "-n", "2", ip], stdout=subprocess.PIPE, stderr=subprocess.PIPE
-            )
-
-            if response.returncode == 0:
-                return True
-            else:
-                sys.exit(
-                    "No internet connection. Please check your internet connection."
-                )
-
-        except Exception as e:
-            sys.exit("Error occurred while checking internet connection.")
+            return True
+        except subprocess.CalledProcessError:
+            print(f"Connection failed. Retrying...({attempt}/3)")
+            continue
+    print("All attempts failed. Please check your connection.")
+    return False
