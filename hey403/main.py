@@ -6,10 +6,14 @@ from rich.progress import Progress
 from cli.parser import build_parser
 from hey403.services.dns_resolver import set_dns, test_dns
 from hey403.utils.table import create_table
+from hey403.utils.netrowk_utils import check_internet_connection
 from network.dns_servers import DNS_SERVERS
 
 
 def main():
+    
+    check_internet_connection()
+    
     parser = build_parser()
     args = parser.parse_args()
 
