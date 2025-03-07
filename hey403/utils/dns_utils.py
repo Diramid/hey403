@@ -44,10 +44,11 @@ class DNSManager:
 
         elif self.platform == "Linux":
             result = subprocess.check_output(
-                ["nmcli", "-t", "-f", "IP4.DNS", "connection", "show", "--active"],
-                text=True,
-            )
-            return result.strip() or "Unknown"
+                ["nmcli", "device", "show"],
+                text=True
+            ).splitlines()
+            res = [line[13:].strip() for line in result if line.startswith('IP4.DNS')]
+            return res[0].strip() or "Unknown"
 
         elif self.platform == "Darwin":
             result = subprocess.check_output(
