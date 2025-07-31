@@ -11,6 +11,8 @@
 [![Issues](https://img.shields.io/github/issues/Diramid/hey-403-cli?logo=github&color=red)](https://github.com/Diramid/hey-403-cli/issues)
 [![License](https://img.shields.io/github/license/Diramid/hey-403-cli?logo=open-source-initiative&color=green)](https://github.com/Diramid/hey-403-cli/blob/main/LICENSE)
 [![PyPI](https://img.shields.io/pypi/v/hey403?logo=pypi&color=blue)](https://pypi.org/project/hey403/)
+[![PyPI Downloads](https://static.pepy.tech/badge/hey403)](https://pepy.tech/projects/hey403)
+
 
 </div>
 
