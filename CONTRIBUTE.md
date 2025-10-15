@@ -38,7 +38,7 @@ To contribute, you'll need:
 ## How to Contribute
 
 ### Finding Something to Work On
-- Check the [ROADMAP.md](ROADMAP.md) for planned features and tasks.
+- Check the [ROADMAP](https://github.com/Diramid/hey403/issues/13) for planned features and tasks.
 - Browse open [issues](https://github.com/Diramid/hey-403-cli/issues) labeled `good first issue` or `help wanted`.
 - Propose a new feature or bug fix by opening an issue to discuss it first.
 
