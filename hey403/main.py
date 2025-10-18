@@ -1,5 +1,8 @@
 import sys
+import csv
+import json
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime
 
 import typer
 from rich.console import Console
@@ -23,11 +26,18 @@ app = typer.Typer()
 
 @app.command()
 def main(
-        url: str = typer.Option(None, "--url", help="URL to test DNS resolution"),
-        set_dns_flag: bool = typer.Option(False, "--set", help="Set the fastest DNS automatically"),
-        current_dns: bool = typer.Option(False, "--current-dns", "-c", help="Display the current DNS"),
-        unset: bool = typer.Option(False, "--unset", help="Unset the DNS settings"),
-        version: bool = typer.Option(False, "--version", "-v", help="Display the application version"),
+    url: str = typer.Option(None, "--url", help="URL to test DNS resolution"),
+    set_dns_flag: bool = typer.Option(
+        False, "--set", help="Set the fastest DNS automatically"
+    ),
+    current_dns: bool = typer.Option(
+        False, "--current-dns", "-c", help="Display the current DNS"
+    ),
+    unset: bool = typer.Option(False, "--unset", help="Unset the DNS settings"),
+    version: bool = typer.Option(
+        False, "--version", "-v", help="Display the application version"
+    ),
+    output: str = typer.Option(None, "--output", help="Save results to CSV file"),
 ):
     """Handle DNS testing, configuration, and version display."""
     try:
@@ -41,6 +51,7 @@ def main(
 
         table = create_table()
         dns_success_list = []
+        all_results = []  # Store all results for CSV export
 
         if current_dns:
             current_dns_ip = get_current_dns()
@@ -87,6 +98,29 @@ def main(
                             status_message,
                             response_time_display,
                         ) = future.result()
+
+                        # Clean status message for CSV (remove Rich formatting)
+                        clean_status = (
+                            status_message.replace("[green]", "")
+                            .replace("[/green]", "")
+                            .replace("[red]", "")
+                            .replace("[/red]", "")
+                            .replace("[yellow]", "")
+                            .replace("[/yellow]", "")
+                        )
+
+                        # Store result for CSV export
+                        result_row = {
+                            "dns_name": dns_name,
+                            "preferred_dns": preferred_dns,
+                            "alternative_dns": alternative_dns,
+                            "status": clean_status,
+                            "response_time": response_time_display,
+                            "test_url": url,
+                            "timestamp": datetime.now().isoformat(),
+                        }
+                        all_results.append(result_row)
+
                         table.add_row(
                             dns_name,
                             preferred_dns,
@@ -116,6 +150,34 @@ def main(
         # Display the results table
         console.print(table)
 
+        # Export to CSV if requested
+        if output == "csv":
+            try:
+                with open("csv_output.csv", "w", newline="", encoding="utf-8") as csvfile:
+                    fieldnames = [
+                        "dns_name",
+                        "preferred_dns",
+                        "alternative_dns",
+                        "status",
+                        "response_time",
+                        "test_url",
+                        "timestamp",
+                    ]
+                    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+                    writer.writeheader()
+                    writer.writerows(all_results)
+
+                console.print("[green]Results saved to CSV file: csv_output.csv[/green]")
+            except Exception as e:
+                console.print(f"[red]Error saving CSV file: {e}[/red]")
+        elif output == "json":
+            try:
+                with open("json_output.json", "w") as jsonfile:
+                    json.dump(all_results, jsonfile)
+                    console.print("[green]Results saved to JSON file: json_output.json[/green]")
+            except Exception as e:
+                console.print(f"[red]Error saving JSON file: {e}[/red]")
     except Exception as e:
         console.print(f"[red]An unexpected error occurred: {e}[/red]")
         sys.exit(1)
