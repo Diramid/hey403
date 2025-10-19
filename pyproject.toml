@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0.0", "wheel"]
+requires = ["setuptools>=77.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -11,12 +11,12 @@ requires-python = ">=3.10"
 authors = [
     { name = "Diramid", email = "diramidteam@gmail.com" }
 ]
-license = { file = "LICENSE" }
+license = "MIT"
+license-files = ["LICENSE"]
 keywords = ["dns", "cli", "security", "403", "http-testing", "network-troubleshooting"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.11",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Development Status :: 4 - Beta",
     "Intended Audience :: System Administrators",
@@ -40,4 +40,4 @@ Issues = "https://github.com/Diramid/hey-403-cli/issues"
 hey403 = "hey403.main:main"
 
 [tool.setuptools]
-license-files = []
+packages = ["hey403"]
