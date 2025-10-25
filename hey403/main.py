@@ -37,7 +37,7 @@ def main(
     version: bool = typer.Option(
         False, "--version", "-v", help="Display the application version"
     ),
-    output: str = typer.Option(None, "--output", help="Save results to CSV file"),
+    output: str = typer.Option(None, "--output", help="Optinal Parameter to Save results to CSV or JSON file --output (csv|json)"),
 ):
     """Handle DNS testing, configuration, and version display."""
     try:
