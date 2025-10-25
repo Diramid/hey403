@@ -42,6 +42,7 @@
 | ⚡ **Parallel Tests**| Concurrent checks for speed.            |
 | 🎨 **Rich Output**  | Eye-catching, formatted results.         |
 | 🔧 **DNS Control**  | Set or unset DNS directly from the CLI.  |
+| 📊 **Export Data**  | Save results in CSV and JSON formats.    |
 
 ---
 
