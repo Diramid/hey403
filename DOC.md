@@ -12,6 +12,7 @@ Hey 403 is a powerful Python-based CLI utility designed to diagnose domain acces
 - **DNS Management**: Set or unset DNS configurations directly from the CLI.
 - **Parallel Execution**: Run concurrent tests for faster results.
 - **Rich Output**: Enjoy colorful, formatted output with the `rich` library.
+- **Export Data**: Save results in CSV and JSON formats.
 
 ---
 
